@@ -2,11 +2,11 @@
 
 # node
 class Node
-  attr_accessor :value, :data, :pointer
+  attr_accessor :key, :value, :pointer
 
-  def initialize(value = nil, data = nil, pointer = nil)
+  def initialize(key = nil, value = nil, pointer = nil)
+    @key = key
     @value = value
-    @data = data
     @pointer = pointer
   end
 end

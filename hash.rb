@@ -4,38 +4,69 @@ require_relative 'linked_list'
 
 # hash map
 class HashMap
-  attr_accessor :array
+  attr_accessor :buckets
 
   def initialize
-    @array = [] # Array.new(@capacity) { LinkedList.new }
+    @buckets = []
+    @capacities = [16]
     @load_factor = 0.75
     @capacity = 16
   end
 
   def check_load
-    temp = 0.0
-    @array.each { |list| temp += 1 unless list.head.nil? }
-    @capacity *= 2 if temp / @capacity > @load_factor
+    counter = 0.0
+    @buckets.each { |list| counter += 1 unless list.nil? }
+    return unless counter / @capacity > @load_factor
+
+    @capacity *= 2
+    @capacities.push(@capacity)
   end
 
-  def hash(string)
+  def hash(string, capacity = @capacity)
     hash_code = 0
     prime_number = 47
     string.each_char { |char| hash_code = prime_number * hash_code + char.ord }
-    hash_code % @capacity
+    hash_code % capacity
   end
 
   def set(key, value)
     check_load
-    @array[hash(key)] = LinkedList.new if @array[hash(key)].nil?
-
-    @array[hash(key)].append(key, value)
+    @buckets[hash(key)] = LinkedList.new if @buckets[hash(key)].nil?
+    remove(key) if key?(key)
+    @buckets[hash(key)].append(key, value)
   end
 
   def get(key)
-    @array[hash(key)].contains?(key) ? @array[hash(key)].find(key) : nil
+    if key?(key)
+      temp = @buckets[hash(key)]&.find(key)
+      temp.value
+    else
+      display_error
+    end
+  end
+
+  def key?(key)
+    @buckets[hash(key)]&.contains?(key)
+  end
+
+  def remove(key)
+    @buckets[hash(key)].delete(key)
+  end
+
+  def display_error
+    puts "Sorry, this key doesn't exist"
+  end
+
+  def find_bucket(key) # needs fixing
+    temp = nil
+    @capacities.each do |capacity|
+      temp = @buckets.index(capacity) if @buckets[hash(key, capacity).key?(key)]
+    end
+    temp
   end
 end
 
 a = HashMap.new
 a.set('Nick', 'friend')
+a.set('Van', 'wiz')
+a.set('Bab', 'handyman')
