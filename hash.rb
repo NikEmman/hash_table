@@ -4,6 +4,8 @@ require_relative 'linked_list'
 
 # hash map
 class HashMap
+  attr_accessor :array
+
   def initialize
     @array = [] # Array.new(@capacity) { LinkedList.new }
     @load_factor = 0.75
@@ -23,16 +25,17 @@ class HashMap
     hash_code % @capacity
   end
 
-  def set(key, value) # check if key exists and if yes overwrite value
+  def set(key, value)
     check_load
-    if @array[hash(key)].nil?
-      @array[hash(key)] = LinkedList.new.append([key, value])
-    else
-      @array[hash(key)].append([key, value])
-    end
+    @array[hash(key)] = LinkedList.new if @array[hash(key)].nil?
+
+    @array[hash(key)].append(key, value)
   end
 
   def get(key)
-    # check if key exists ? return [key,value] value : nil
+    @array[hash(key)].contains?(key) ? @array[hash(key)].find(key) : nil
   end
 end
+
+a = HashMap.new
+a.set('Nick', 'friend')

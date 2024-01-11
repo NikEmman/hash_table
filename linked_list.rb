@@ -16,15 +16,15 @@ class LinkedList
     temp
   end
 
-  def prepend(value)
-    @head = @head.nil? ? Node.new(value) : Node.new(value, @head)
+  def prepend(value, data)
+    @head = @head.nil? ? Node.new(value, data) : Node.new(value, data, @head)
   end
 
-  def append(value)
+  def append(value, data)
     if @head.nil?
-      prepend(value)
+      prepend(value, data)
     else
-      tail.pointer = Node.new(value)
+      tail.pointer = Node.new(value, data)
     end
   end
 
@@ -57,31 +57,21 @@ class LinkedList
 
   def contains?(value)
     temp = @head
-    found = false
-    loop do
-      if temp.value == value
-        found = true
-        break
-      else
-        temp = temp.pointer
-      end
-      break if temp.pointer.nil?
+    while temp
+      return true if temp.value == value
+
+      temp = temp.pointer
     end
-    found = true if tail.value == value
-    found
+    false
   end
 
-  def find(value) # modify to return value, not counter
+  def find(value)
     temp = @head
-    counter = 0
     until temp.pointer.nil?
       break if temp.value == value
 
       temp = temp.pointer
-      counter += 1
-
     end
-    counter = nil unless contains?(value)
-    counter
+    temp.data
   end
 end
