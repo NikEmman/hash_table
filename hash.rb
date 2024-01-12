@@ -32,7 +32,7 @@ class HashMap
   def set(key, value)
     check_load
     @buckets[hash(key)] = LinkedList.new if @buckets[hash(key)].nil?
-    remove(key) if key?(key)
+
     @buckets[hash(key)].append(key, value)
   end
 
@@ -45,26 +45,28 @@ class HashMap
     end
   end
 
-  def key?(key)
-    @buckets[hash(key)]&.contains?(key)
+  def key?(key, capacity = @capacity)
+    @buckets[hash(key, capacity)]&.contains?(key)
   end
 
   def remove(key)
-    @buckets[hash(key)].delete(key)
+    @buckets[find_bucket(key)].delete(key)
   end
 
   def display_error
     puts "Sorry, this key doesn't exist"
   end
 
-  def find_bucket(key) # needs fixing
+  def find_bucket(key)
     temp = nil
     @capacities.each do |capacity|
-      temp = @buckets.index(capacity) if @buckets[hash(key, capacity).key?(key)]
+      temp = hash(key, capacity) if @buckets[hash(key, capacity)]&.contains?(key)
     end
     temp
   end
 end
+
+# fix find bucket when key doesnt exist and key? for all capacities
 
 a = HashMap.new
 a.set('Nick', 'friend')
