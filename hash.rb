@@ -45,8 +45,10 @@ class HashMap
     end
   end
 
-  def key?(key, capacity = @capacity)
-    @buckets[hash(key, capacity)]&.contains?(key)
+  def key?(key, _capacity = @capacity)
+    return false if find_bucket(key).nil?
+
+    @buckets[find_bucket(key)]&.contains?(key)
   end
 
   def remove(key)
