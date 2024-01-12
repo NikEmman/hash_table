@@ -31,24 +31,27 @@ class HashMap
 
   def set(key, value)
     check_load
-    @buckets[hash(key)] = LinkedList.new if @buckets[hash(key)].nil?
-
-    @buckets[hash(key)].append(key, value)
+    if find_bucket(key).nil?
+      @buckets[hash(key)] = LinkedList.new if @buckets[hash(key)].nil?
+      @buckets[hash(key)].append(key, value)
+    else
+      @buckets[find_bucket(key)].find(key).value = value
+    end
   end
 
   def get(key)
     if key?(key)
-      temp = @buckets[hash(key)]&.find(key)
+      temp = @buckets[find_bucket(key)].find(key)
       temp.value
     else
       display_error
     end
   end
 
-  def key?(key, _capacity = @capacity)
+  def key?(key)
     return false if find_bucket(key).nil?
 
-    @buckets[find_bucket(key)]&.contains?(key)
+    @buckets[find_bucket(key)].contains?(key)
   end
 
   def remove(key)
@@ -67,8 +70,6 @@ class HashMap
     temp
   end
 end
-
-# fix find bucket when key doesnt exist and key? for all capacities
 
 a = HashMap.new
 a.set('Nick', 'friend')
