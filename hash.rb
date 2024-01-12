@@ -69,9 +69,34 @@ class HashMap
     end
     temp
   end
+
+  def length
+    counter = 0
+    @buckets.each { |list| counter += list.size unless list.nil? }
+    counter
+  end
+
+  def clear
+    @buckets = []
+    @capacities = [16]
+    @capacity = 16
+  end
+
+  def values
+    values_array = []
+    @buckets.each { |list| values_array.push(list.values) unless list.nil? }
+    values_array.flatten
+    # returns an array containing all the values.
+  end
+
+  def entries
+    # returns an array that contains each key, value pair. Example: [[first_key, first_value], [second_key, second_value]]
+  end
 end
 
 a = HashMap.new
 a.set('Nick', 'friend')
 a.set('Van', 'wiz')
 a.set('Bab', 'handyman')
+a.set('Tal', 'sorc')
+a.set('Bob', 'ferryman')

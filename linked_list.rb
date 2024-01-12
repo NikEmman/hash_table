@@ -16,6 +16,16 @@ class LinkedList
     temp
   end
 
+  def values
+    values = []
+    temp = @head
+    while temp
+      values.push(temp.value)
+      temp = temp.pointer
+    end
+    values
+  end
+
   def prepend(key, value)
     @head = @head.nil? ? Node.new(key, value) : Node.new(key, value, @head)
   end
