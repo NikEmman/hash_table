@@ -84,4 +84,17 @@ class LinkedList
       temp.pointer = temp.pointer.pointer
     end
   end
+
+  def get_pairs
+    pairs = []
+    current = @head
+    while current
+      temp_arr = []      
+      temp_arr.push(current.key)
+      temp_arr.push(current.value)
+      pairs.push(temp_arr)
+      current = current.pointer
+    end
+    pairs
+  end
 end

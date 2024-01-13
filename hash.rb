@@ -86,11 +86,12 @@ class HashMap
     values_array = []
     @buckets.each { |list| values_array.push(list.values) unless list.nil? }
     values_array.flatten
-    # returns an array containing all the values.
   end
 
   def entries
-    # returns an array that contains each key, value pair. Example: [[first_key, first_value], [second_key, second_value]]
+    entries = []
+    @buckets.each { |list| entries.push(list.get_pairs) unless list.nil? }
+    entries.flatten(1)
   end
 end
 
